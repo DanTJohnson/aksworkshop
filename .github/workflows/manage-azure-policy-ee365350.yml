@@ -1,0 +1,32 @@
+name: manage-azure-policy-ee365350
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'initiatives/FedRAMP_Moderate_e95f5a9f-57ad-4d03-bb0b-b1d16db93693/**'
+#      - .github/workflows/manage-azure-policy-ee365350.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_ee365350}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          initiatives/FedRAMP_Moderate_e95f5a9f-57ad-4d03-bb0b-b1d16db93693/**
